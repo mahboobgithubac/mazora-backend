@@ -1,4 +1,5 @@
 package com.mazora.backend.service.impl;
+
 import com.mazora.backend.dto.AuthRequest;
 import com.mazora.backend.dto.AuthResponse;
 import com.mazora.backend.model.User;
@@ -12,50 +13,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private UserRepository userRepo;
+	@Autowired
+	private UserRepository userRepo;
 
-    @Autowired
-    private JwtService jwtService;
-@Autowired
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+	@Autowired
+	private JwtService jwtService;
+	@Autowired
+	private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @Override
-    public AuthResponse login(AuthRequest request) {
-        User user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
-System.out.println("User in side login method"+user);
-        if (!encoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid credentials");
-        }
+	@Override
+	public AuthResponse login(AuthRequest request) {
+		User user = userRepo.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+		System.out.println("User in side login method" + user);
+		if (!encoder.matches(request.getPassword(), user.getPassword())) {
+			throw new RuntimeException("Invalid credentials");
+		}
 
-        String token = jwtService.generateToken(user.getEmail());
-        return new AuthResponse(token,
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole());
-    }
+		String token = jwtService.generateToken(user.getEmail());
+		return new AuthResponse(token, user.getId(), user.getName(), user.getEmail(), user.getRole());
+	}
 
-    @Override
-    public AuthResponse register(User user) {
-        if (userRepo.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already registered");
-        }
+	@Override
+	public AuthResponse register(User user) {
+		if (userRepo.existsByEmail(user.getEmail())) {
+			throw new RuntimeException("Email already registered");
+		}
 
-        user.setPassword(encoder.encode(user.getPassword()));
-        userRepo.save(user);
-        String token = jwtService.generateToken(user.getEmail());
-        // 3. Prepare response
-       
+		user.setPassword(encoder.encode(user.getPassword()));
+		userRepo.save(user);
+		String token = jwtService.generateToken(user.getEmail());
+		// 3. Prepare response
 
-       
-        return new AuthResponse(
-                token,
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getRole()
-            );
-    }
+		return new AuthResponse(token, user.getId(), user.getName(), user.getEmail(), user.getRole());
+	}
 }

@@ -24,67 +24,52 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtService jwtService;
+	@Autowired
+	private JwtService jwtService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-//    @Autowired
-//    private UserService userService;
-    @Autowired
-    private UserDetailsService userDetailsService;
+	// Extract JWT from Authorization Header
+	private String getJwtFromRequest(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7); // Remove "Bearer " prefix
+		}
+		return null;
+	}
 
-    // Extract JWT from Authorization Header
-    private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7); // Remove "Bearer " prefix
-        }
-        return null;
-    }
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+		String path = request.getRequestURI();
+		System.out.println("At 47  path= " + path);
+		// ✅ Skip JWT check for public endpoints
+		if (path.startsWith("/api/auth/")) {
+			System.out.println("inside   if (path.startsWith(\"/api/auth/\")) { ");
+			filterChain.doFilter(request, response);
+			return;
+		}
 
-        String path = request.getRequestURI();
-System.out.println("At 47  path= "+path);
-        // ✅ Skip JWT check for public endpoints
-        if (path.startsWith("/api/auth/")) {
-        	System.out.println("inside   if (path.startsWith(\"/api/auth/\")) { ");
-            filterChain.doFilter(request, response);
-            return;
-        }
-        System.out.println("At 54********");
+		try {
+			String jwt = getJwtFromRequest(request);
+			if (jwt != null && jwtService.validateToken(jwt)) {
+				String email = jwtService.extractUsername(jwt);
+				if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+					UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+							userDetails, null, userDetails.getAuthorities());
+					authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+					SecurityContextHolder.getContext().setAuthentication(authentication);
+				}
+			}
 
-        try {
-            String jwt = getJwtFromRequest(request);
-System.out.println("jwt  ->"+jwt);
-            if (jwt != null && jwtService.validateToken(jwt)) {
-                String email = jwtService.extractUsername(jwt);
-System.out.println("email  ->"+email);
-if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-                System.out.println("User authenticated: " + userDetails.getUsername());
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+		} catch (Exception ex) {
+			System.err.println("Cannot set user authentication: " + ex.getMessage());
+			ex.printStackTrace();
+		}
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
+		filterChain.doFilter(request, response);
+	}
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-}            }
-
-        } catch (Exception ex) {
-            System.err.println("Cannot set user authentication: " + ex.getMessage());
-            ex.printStackTrace();
-        }
-
-        filterChain.doFilter(request, response);
-    }
- 
 }

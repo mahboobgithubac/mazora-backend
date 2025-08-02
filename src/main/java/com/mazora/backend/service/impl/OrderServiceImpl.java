@@ -28,94 +28,75 @@ import jakarta.transaction.Transactional;
 @Service
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderRepository orderRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    
-    public OrderServiceImpl(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+	private final OrderRepository orderRepository;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private ProductRepository productRepository;
 
-    @Override
-    @Transactional
-    public OrderDTO placeOrder(OrderRequest orderRequest) throws UsernameNotFoundException, ProductNotFoundException {
-    	 User user = userRepository.findById(orderRequest.getUserId())
-    	            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	public OrderServiceImpl(OrderRepository orderRepository) {
+		this.orderRepository = orderRepository;
+	}
 
-    	    Order order = new Order();
-    	    order.setShippingAddress(orderRequest.getShippingAddress());
-    	    order.setUser(user);
+	@Override
+	@Transactional
+	public OrderDTO placeOrder(OrderRequest orderRequest) throws UsernameNotFoundException, ProductNotFoundException {
+		User user = userRepository.findById(orderRequest.getUserId())
+				.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    	    List<OrderItem> orderItems = new ArrayList<>();
+		Order order = new Order();
+		order.setShippingAddress(orderRequest.getShippingAddress());
+		order.setUser(user);
 
-    	    for (OrderItemRequest itemReq : orderRequest.getItems()) {
-    	    	System.out.println();
-    	        Product product = productRepository.findById(itemReq.getProductId())
-    	                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+		List<OrderItem> orderItems = new ArrayList<>();
 
-    	        OrderItem orderItem = new OrderItem();
-    	        orderItem.setProduct(product);
-    	        orderItem.setOrder(order); // ✅ link Order
-    	        orderItem.setQuantity(itemReq.getQuantity());
-    	        orderItem.setPrice(product.getPrice());
+		for (OrderItemRequest itemReq : orderRequest.getItems()) {
+			Product product = productRepository.findById(itemReq.getProductId())
+					.orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-    	        orderItems.add(orderItem);
-    	    }
+			OrderItem orderItem = new OrderItem();
+			orderItem.setProduct(product);
+			orderItem.setOrder(order); // ✅ link Order
+			orderItem.setQuantity(itemReq.getQuantity());
+			orderItem.setPrice(product.getPrice());
 
-    	    order.setItems(orderItems); // if you have mappedBy relationship
-    	    Order savedOrder = orderRepository.save(order);
-    	    return convertToDTO(savedOrder);
-    	    //return orderRepository.save(order);
-      //  return orderRepository.save(order);
-    }
+			orderItems.add(orderItem);
+		}
 
-    @Override
-    public List<Order> getOrdersByEmail(String email) {
-        return orderRepository.findByUserEmail(email);
-    }
-//
-//	@Override
-//	public List<Order> getOrdersByUserId(Long userId) {
-//		 return orderRepository.getOrdersByUserId(userId);
-//	
-//	}
-//    @Override
-//    public List<OrderDTO> getOrdersByUserId(Long userId) {
-//        List<Order> orders = orderRepository.findById(userId); // ✅ returns List<Order>
-//        return orders.stream()
-//                     .map(this::convertToDTO)
-//                     .collect(Collectors.toList());
-//    }
-    
-    @Override
-    public List<OrderDTO> getOrdersByUserId(Long userId) {
-        List<Order> orders = orderRepository.findByUserId(userId); // ✅ now returns List<Order>
-              //  .orElseThrow(() -> new OrderNotFoundException("Order not found"));
-        
-        return orders.stream()
-                     .map(this::convertToDTO)
-                     .collect(Collectors.toList());
-    }
-    
-    private OrderDTO convertToDTO(Order order) {
-        OrderDTO dto = new OrderDTO();
-        dto.setId(order.getId());
-        dto.setShippingAddress(order.getShippingAddress());
-        dto.setOrderDate(order.getOrderDate());
-        dto.setUserName(order.getUser().getName());
+		order.setItems(orderItems); // if you have mappedBy relationship
+		Order savedOrder = orderRepository.save(order);
+		return convertToDTO(savedOrder);
+	}
 
-        List<OrderItemDTO> itemDTOs = order.getItems().stream().map(item -> {
-            OrderItemDTO itemDTO = new OrderItemDTO();
-            itemDTO.setProductTitle(item.getProduct().getTitle());
-            itemDTO.setPrice(item.getPrice());
-            itemDTO.setQuantity(item.getQuantity());
-            itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
-            return itemDTO;
-        }).collect(Collectors.toList());
+	@Override
+	public List<Order> getOrdersByEmail(String email) {
+		return orderRepository.findByUserEmail(email);
+	}
 
-        dto.setItems(itemDTOs);
-        return dto;
-    }
+	@Override
+	public List<OrderDTO> getOrdersByUserId(Long userId) {
+		List<Order> orders = orderRepository.findByUserId(userId); // ✅ now returns List<Order>
+		// .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+
+		return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
+	}
+
+	private OrderDTO convertToDTO(Order order) {
+		OrderDTO dto = new OrderDTO();
+		dto.setId(order.getId());
+		dto.setShippingAddress(order.getShippingAddress());
+		dto.setOrderDate(order.getOrderDate());
+		dto.setUserName(order.getUser().getName());
+		List<OrderItemDTO> itemDTOs = order.getItems().stream().map(item -> {
+			OrderItemDTO itemDTO = new OrderItemDTO();
+			itemDTO.setProductTitle(item.getProduct().getTitle());
+			itemDTO.setPrice(item.getPrice());
+			itemDTO.setQuantity(item.getQuantity());
+			itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
+			return itemDTO;
+		}).collect(Collectors.toList());
+
+		dto.setItems(itemDTOs);
+		return dto;
+	}
 }
