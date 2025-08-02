@@ -30,8 +30,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Value("${app.upload.path}")
 	private String uploadPath;
-	
-	
+	 String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
+//	 https://<your-railway-app>.up.railway.app/uploads/<filename>
+	 String imagePathLocal="http://localhost:8089/uploads/";
 
 	public Product saveProductWithImage(String title, String description, double price, String category,
 			MultipartFile imageFile) throws IOException {
@@ -60,8 +61,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductDTO> getAllProducts() {
-		System.out.println("uploadPath in product service impl ->"+uploadPath);
+		//System.out.println("uploadPath in product service impl ->"+uploadPath);
 		List<Product> products = productRepo.findAll();
+	
 		return products.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
@@ -71,7 +73,13 @@ public class ProductServiceImpl implements ProductService {
 		dto.setTitle(product.getTitle());
 		dto.setDescription(product.getDescription());
 		dto.setPrice(product.getPrice());
-		dto.setImage(product.getImageUrl());
+		//dto.setImage(product.getImageUrl());
+		//for prod
+		dto.setImage(imagePathProd+""+ product.getImageUrl());
+		System.out.println("dto.getImage()->"+dto.getImage());
+		//for local
+		//dto.setImage(imagePathLocal+""+ product.getImageUrl());
+		//System.out.println("dto.getImage()->"+dto.getImage());
 		dto.setCategory(product.getCategory());
 		return dto;
 	}
