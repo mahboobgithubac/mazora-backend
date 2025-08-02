@@ -14,7 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mazora-backend</name>
     <description>Mazora eCommerce Backend</description>
-	<packaging>jar</packaging> <!-- ✅ Important -->
+	<packaging>jar</packaging> 
 	
 	
 	
