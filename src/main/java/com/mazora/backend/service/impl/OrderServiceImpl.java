@@ -33,7 +33,10 @@ public class OrderServiceImpl implements OrderService {
 	private UserRepository userRepository;
 	@Autowired
 	private ProductRepository productRepository;
-
+	 String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
+//	 https://<your-railway-app>.up.railway.app/uploads/<filename>
+	 String imagePathLocal="http://localhost:8089/uploads/";
+	
 	public OrderServiceImpl(OrderRepository orderRepository) {
 		this.orderRepository = orderRepository;
 	}
@@ -93,6 +96,12 @@ public class OrderServiceImpl implements OrderService {
 			itemDTO.setPrice(item.getPrice());
 			itemDTO.setQuantity(item.getQuantity());
 			itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
+			
+			itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
+			
+			
+			//dto.setImage(imagePathProd+""+ product.getImageUrl());
+			System.out.println("itemDTO.getImagee()->"+itemDTO.getImage());
 			return itemDTO;
 		}).collect(Collectors.toList());
 
