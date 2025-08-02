@@ -12,8 +12,12 @@
 	<groupId>com.mazora</groupId>
 	<artifactId>mazora-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Mazora eCommerce Backend</description>
+	<name>mazora-backend</name>
+    <description>Mazora eCommerce Backend</description>
+	<packaging>jar</packaging> <!-- ✅ Important -->
+	
+	
+	
 	<url />
 	<licenses>
 		<license />
