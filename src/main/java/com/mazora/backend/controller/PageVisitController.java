@@ -6,7 +6,7 @@ import com.mazora.backend.service.PageVisitService;
 @RestController
 @RequestMapping("/api/visits")
 //@CrossOrigin(origins = "*") // or restrict to React/Netlify domain
-@CrossOrigin(origins = {"http://localhost:3000", "https://your-app.netlify.app"})
+//@CrossOrigin(origins = {"http://localhost:3000", "https://your-app.netlify.app"})
 public class PageVisitController {
 
     private final PageVisitService service;

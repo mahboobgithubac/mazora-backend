@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = {"http://localhost:3000", "https://your-app.netlify.app"})
+//@CrossOrigin(origins = {"http://localhost:3000", "https://your-app.netlify.app"})
 
 
 //@CrossOrigin(origins = "https://mazora.netlify.app/")
