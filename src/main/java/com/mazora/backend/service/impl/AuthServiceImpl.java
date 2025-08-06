@@ -23,6 +23,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public AuthResponse login(AuthRequest request) {
+		System.out.println("Inside login method");
 		User user = userRepo.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
 		System.out.println("User in side login method" + user);
 		if (!encoder.matches(request.getPassword(), user.getPassword())) {

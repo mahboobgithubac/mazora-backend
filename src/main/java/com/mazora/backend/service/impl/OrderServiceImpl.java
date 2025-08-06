@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.mazora.backend.dto.OrderDTO;
@@ -96,16 +97,21 @@ public class OrderServiceImpl implements OrderService {
 			itemDTO.setPrice(item.getPrice());
 			itemDTO.setQuantity(item.getQuantity());
 			itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
-			
-			itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
+		   itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
 			
 			
 			//dto.setImage(imagePathProd+""+ product.getImageUrl());
-			System.out.println("itemDTO.getImagee()->"+itemDTO.getImage());
+		//	System.out.println("itemDTO.getImagee()->"+itemDTO.getImage());
 			return itemDTO;
 		}).collect(Collectors.toList());
 
 		dto.setItems(itemDTOs);
 		return dto;
+	}
+	public List<OrderDTO> getAllOrders() {
+	    List<Order> orders = orderRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+	    return orders.stream()
+	                 .map(this::convertToDTO)
+	                 .collect(Collectors.toList());
 	}
 }

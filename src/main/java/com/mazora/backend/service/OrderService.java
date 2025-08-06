@@ -12,4 +12,6 @@ public interface OrderService {
 	OrderDTO placeOrder( OrderRequest orderRequest) throws UsernameNotFoundException, ProductNotFoundException;
     List<Order> getOrdersByEmail(String email);
     List<OrderDTO> getOrdersByUserId(Long userId);
+	List<OrderDTO> getAllOrders();
+
 }

@@ -26,30 +26,42 @@ public class ProductServiceImpl implements ProductService {
 	private ProductRepository productRepo;
 
 	@Value("${file.upload-dir}")
+	//private final  Path uploadDir;
 	private String uploadDir;
 	
 	@Value("${app.upload.path}")
 	private String uploadPath;
+	
+	   private final Path uploadDir2 = Paths.get("uploads");
+	   
+	 @Autowired
+	   FileStorageServiceImpl filestorage; 
+	    
+    
 	 String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
 //	 https://<your-railway-app>.up.railway.app/uploads/<filename>
-	 String imagePathLocal="http://localhost:8089/uploads/";
+	 String imagePathLocal="http://localhost:8080/uploads/";
 
 	public Product saveProductWithImage(String title, String description, double price, String category,
 			MultipartFile imageFile) throws IOException {
 
 // 1. Save file to disk
-		String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-		Path filePath = Paths.get(uploadDir, fileName);
-		Files.createDirectories(filePath.getParent());
-		Files.write(filePath, imageFile.getBytes());
-
+		//String fileName = System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+//		Path filePath = Paths.get(uploadDir, fileName);
+//		Files.createDirectories(filePath.getParent());
+//		Files.write(filePath, imageFile.getBytes());
+		String fileName =filestorage.saveFile(imageFile);
 // 2. Save product
 		Product product = new Product();
 		product.setTitle(title);
 		product.setDescription(description);
 		product.setPrice(price);
 		product.setCategory(category);
-		product.setImageUrl("/uploads/" + fileName); // or full URL
+	//	product.setImageUrl("/uploads/" + fileName); // or full URL
+		product.setImageUrl(fileName); // or full URL
+//System.out.println("fileName ->"+fileName);
+//System.out.println("product.getImageUrl(fileName);  ->"+product.getImageUrl() );
+
 
 		return productRepo.save(product);
 	}
@@ -75,11 +87,11 @@ public class ProductServiceImpl implements ProductService {
 		dto.setPrice(product.getPrice());
 		//dto.setImage(product.getImageUrl());
 		//for prod
-		dto.setImage(imagePathProd+""+ product.getImageUrl());
-		System.out.println("dto.getImage()->"+dto.getImage());
-		//for local
-		//dto.setImage(imagePathLocal+""+ product.getImageUrl());
+		//dto.setImage(imagePathProd+""+ product.getImageUrl());
 		//System.out.println("dto.getImage()->"+dto.getImage());
+		//for local
+		dto.setImage(imagePathLocal+""+ product.getImageUrl());
+//		System.out.println("dto.getImage()->"+dto.getImage());
 		dto.setCategory(product.getCategory());
 		return dto;
 	}
@@ -106,5 +118,5 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> saveAll(List<Product> products) {
 		return productRepo.saveAll(products);
 	}
-
+	
 }

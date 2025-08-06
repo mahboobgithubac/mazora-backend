@@ -43,10 +43,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 
 		String path = request.getRequestURI();
-		System.out.println("At 47  path= " + path);
+		//System.out.println("At 47  path= " + path);
 		// ✅ Skip JWT check for public endpoints
 		if (path.startsWith("/api/auth/")) {
-			System.out.println("inside   if (path.startsWith(\"/api/auth/\")) { ");
+		//	System.out.println("inside   if (path.startsWith(\"/api/auth/\")) { ");
 			filterChain.doFilter(request, response);
 			return;
 		}
