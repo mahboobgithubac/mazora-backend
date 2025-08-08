@@ -41,9 +41,9 @@ public class ProductController {
 		return productService.saveProduct(product);
 	}
 
-	@PostMapping({ "", "/withimage" })
+	@PostMapping({ "/withimage" })
 	public ResponseEntity<Product> addProductWithImage(
-		
+			
 		        @RequestParam("title") String title,
 		        @RequestParam("description") String description,
 		        @RequestParam("price") Double price,
