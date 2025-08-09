@@ -13,11 +13,11 @@
 	<artifactId>mazora-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mazora-backend</name>
+
     <description>Mazora eCommerce Backend</description>
-	<packaging>jar</packaging> 
-	
-	
-	
+	<packaging>jar</packaging>
+
+
 	<url />
 	<licenses>
 		<license />
@@ -70,6 +70,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
+
+
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
