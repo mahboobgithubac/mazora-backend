@@ -19,4 +19,6 @@ public interface ProductService {
     void deleteProduct(Long id)throws ProductNotFoundException;
 	Product saveProductWithImage(String title, String description, double price, String category,
 			MultipartFile imageFile) throws IOException ;
+
+	void deleteAllProducts();
 }

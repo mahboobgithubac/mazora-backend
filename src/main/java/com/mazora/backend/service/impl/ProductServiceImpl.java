@@ -120,5 +120,10 @@ System.out.println("at  64 product====>"+product);
 	public List<Product> saveAll(List<Product> products) {
 		return productRepo.saveAll(products);
 	}
+
+	@Override
+		public void deleteAllProducts() {
+		    productRepo.deleteAll();
+		}
+	}
 	
-}

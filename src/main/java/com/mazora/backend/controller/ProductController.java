@@ -106,4 +106,10 @@ public class ProductController {
         logger.info("Request to delete product with ID: {}", id);
 		productService.deleteProduct(id);
 	}
+	@DeleteMapping("/all")
+	public ResponseEntity<Void> deleteAllProducts() {
+	    logger.info("Request to delete all products");
+	    productService.deleteAllProducts();
+	    return ResponseEntity.noContent().build();  // 204 No Content
+	}
 }

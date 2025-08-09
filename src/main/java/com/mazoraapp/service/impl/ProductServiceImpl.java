@@ -143,5 +143,8 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> saveAll(List<Product> products) {
 		return productRepo.saveAll(products);
 	}
-
+	@Override
+	public void deleteAllProducts() {
+	    productRepo.deleteAll();
+	}
 }
