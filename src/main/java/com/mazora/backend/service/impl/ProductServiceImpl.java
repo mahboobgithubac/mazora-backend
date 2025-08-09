@@ -90,8 +90,10 @@ public class ProductServiceImpl implements ProductService {
 		//dto.setImage(imagePathProd+""+ product.getImageUrl());
 		//System.out.println("dto.getImage()->"+dto.getImage());
 		//for local
-		dto.setImage(imagePathLocal+""+ product.getImageUrl());
-//		System.out.println("dto.getImage()->"+dto.getImage());
+//		dto.setImage(imagePathLocal+""+ product.getImageUrl());
+		dto.setImage( product.getImageUrl());
+	//	
+		System.out.println("dto.getImage()->"+dto.getImage());
 		dto.setCategory(product.getCategory());
 		return dto;
 	}
