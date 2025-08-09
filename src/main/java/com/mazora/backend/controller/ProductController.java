@@ -51,11 +51,11 @@ public class ProductController {
 		        
 		        @RequestParam("image") MultipartFile imageFile) throws IOException {
 
-		    String imagePath = fileStorageService.saveFile(imageFile); // save and return URL
+		    //String imagePath = fileStorageService.saveFile(imageFile); // save and return URL
 		    Product product = productService.saveProductWithImage(title, description, price, category, imageFile);
 		 
 		    //productRepository.save(product);
-//
+//System.out.println("product        ->"+product);
 		    return ResponseEntity.ok(product);
 //		//}
 	}

@@ -69,14 +69,22 @@ public class ProductServiceImpl implements ProductService {
 
 	public Product saveProductWithImage(String title, String description, double price, String category,
 			MultipartFile imageFile) throws IOException {
-		System.out.println("Inside save product with image*******8");
+		 
+//		System.out.println("At 72 Inside save product with image*******");
+//		System.out.println("title  ->"+title);
+//		System.out.println("description   ->"+description);
+//		System.out.println("price    ->"+price);
+//		System.out.println("category    ->"+category);
+//		System.out.println("imageFile.getName()  ->"+imageFile.getName());
+
 		String imageUrl = imageUploadServiceImpl.uploadFile(imageFile);
-			System.out.println("imageUrl->"+imageUrl);
+			//System.out.println("imageUrl->"+imageUrl);
 		Product product = new Product();
 		product.setTitle(title);
 		product.setPrice(price);
 		product.setDescription(description);
 		product.setImageUrl(imageUrl);
+		product.setCategory(category);
 
 		return productRepo.save(product);
 

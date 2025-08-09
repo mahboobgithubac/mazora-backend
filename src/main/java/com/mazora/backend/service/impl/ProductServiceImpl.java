@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setImageUrl(fileName); // or full URL
 //System.out.println("fileName ->"+fileName);
 //System.out.println("product.getImageUrl(fileName);  ->"+product.getImageUrl() );
-
+System.out.println("at  64 product====>"+product);
 
 		return productRepo.save(product);
 	}
@@ -93,7 +93,7 @@ public class ProductServiceImpl implements ProductService {
 //		dto.setImage(imagePathLocal+""+ product.getImageUrl());
 		dto.setImage( product.getImageUrl());
 	//	
-		System.out.println("dto.getImage()->"+dto.getImage());
+	//	System.out.println("dto.getImage()->"+dto.getImage());
 		dto.setCategory(product.getCategory());
 		return dto;
 	}

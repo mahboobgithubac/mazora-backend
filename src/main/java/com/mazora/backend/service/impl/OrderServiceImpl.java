@@ -97,7 +97,8 @@ public class OrderServiceImpl implements OrderService {
 			itemDTO.setPrice(item.getPrice());
 			itemDTO.setQuantity(item.getQuantity());
 			itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
-		   itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
+//		   itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
+		   itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
 			
 			
 			//dto.setImage(imagePathProd+""+ product.getImageUrl());

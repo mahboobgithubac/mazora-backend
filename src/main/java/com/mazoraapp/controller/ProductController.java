@@ -53,12 +53,12 @@ public class ProductController {
 		        @RequestParam("category") String category,
 		        
 		        @RequestParam("image") MultipartFile imageFile) throws IOException {
-		System.out.println("form data in product controller");
-System.out.println(title);
-System.out.println(description);
-System.out.println(price);
-System.out.println(category);
-System.out.println(imageFile.getName());
+		//System.out.println("At 56  form data in product controller");
+//System.out.println("title  ->"+title);
+//System.out.println("description   ->"+description);
+//System.out.println("price    ->"+price);
+//System.out.println("category    ->"+category);
+//System.out.println("imageFile.getName()  ->"+imageFile.getName());
 
 		   // String imagePath = fileStorageService.saveFile(imageFile); // save and return URL
 		    Product product = productService.saveProductWithImage(title, description, price, category, imageFile);
