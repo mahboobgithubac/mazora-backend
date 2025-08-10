@@ -1,7 +1,4 @@
 package com.mazoraapp.security;
-
-//import com.mazoraapp.service.JwtService;
-
 import com.mazoraapp.service.UserService;
 import com.mazoraapp.config.JwtService;
 import com.mazoraapp.model.User;
@@ -18,17 +15,13 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
 	@Autowired
 	private JwtService jwtService;
 	@Autowired
 	private UserDetailsService userDetailsService;
-
 	// Extract JWT from Authorization Header
 	private String getJwtFromRequest(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
@@ -37,20 +30,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		return null;
 	}
-
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-
 		String path = request.getRequestURI();
-		//System.out.println("At 47  path= " + path);
 		// ✅ Skip JWT check for public endpoints
 		if (path.startsWith("/api/auth/")) {
-		//	System.out.println("inside   if (path.startsWith(\"/api/auth/\")) { ");
 			filterChain.doFilter(request, response);
 			return;
 		}
-
 		try {
 			String jwt = getJwtFromRequest(request);
 			if (jwt != null && jwtService.validateToken(jwt)) {
@@ -63,13 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 					SecurityContextHolder.getContext().setAuthentication(authentication);
 				}
 			}
-
 		} catch (Exception ex) {
 			System.err.println("Cannot set user authentication: " + ex.getMessage());
 			ex.printStackTrace();
 		}
-
 		filterChain.doFilter(request, response);
 	}
-
 }

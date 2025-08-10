@@ -23,10 +23,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/orders")
-//@CrossOrigin(origins = {"http://localhost:3000", "https://your-app.netlify.app"})
-
-
-//@CrossOrigin(origins = "https://mazora.netlify.app/")
 public class OrderController {
 	private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 	private final OrderService orderService;
@@ -47,12 +43,10 @@ public class OrderController {
 		orderRequest.setUserId(user.getId()); // ✅ set user
 		return orderService.placeOrder(orderRequest);
 	}
-
 	@GetMapping("/{email}")
 	public List<Order> getOrders(@PathVariable String email) {
 		return orderService.getOrdersByEmail(email);
 	}
-
 	@GetMapping("/user/{userId}")
 	public List<OrderDTO> getOrdersByUserId(@PathVariable Long userId) {
 		logger.info("*********Received request to fetch orders for userId: {}", userId);
@@ -61,6 +55,7 @@ public class OrderController {
 	@PreAuthorize("hasRole('ADMIN')") // Optional: restrict to admin
 	@GetMapping("/admin/orders")
 	public ResponseEntity<List<OrderDTO>> getAllOrders() {
+		System.out.println("Inside etAll orders");
 	    List<OrderDTO> orders = orderService.getAllOrders();
 	    return ResponseEntity.ok(orders);
 	}

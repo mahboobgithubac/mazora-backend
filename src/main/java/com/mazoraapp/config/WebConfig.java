@@ -15,12 +15,6 @@ import com.mazoraapp.interceptor.RequestLoggingInterceptor;
 public class WebConfig implements WebMvcConfigurer {
 	  @Autowired
 	    private RequestLoggingInterceptor requestLoggingInterceptor;
-//	@Override
-//	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/uploads/**")
-//				.addResourceLocations("file:E:/SpringBoot Work/mazora-backend/mazora-backend/uploads/")
-//				.setCacheControl(CacheControl.noStore()); // <-- this disables browser cache
-//	}
 	//for railway file upload
 	  @Override
 	    public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -62,4 +56,3 @@ public class WebConfig implements WebMvcConfigurer {
 	            .allowCredentials(true);
 	    }
 	}
-//}

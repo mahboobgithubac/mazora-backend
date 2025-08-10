@@ -1,6 +1,4 @@
 package com.mazoraapp.service.impl;
-
-//import com.mazoraapp.exception.UsernameNotFoundException;//
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.mazoraapp.model.User;
 import com.mazoraapp.repository.UserRepository;
@@ -9,15 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
-
     @Autowired
     private UserRepository userRepo;
-
     @Override
     public User registerUser(User user) {
         if (userRepo.existsByEmail(user.getEmail())) {
@@ -25,19 +19,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return userRepo.save(user);
     }
-
     @Override
     public User login(String email, String password) {
         return userRepo.findByEmail(email)
                 .filter(u -> u.getPassword().equals(password))
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
     }
-
     @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
     }
-
     @Override
     public User getUserById(Long id) {
         return userRepo.findById(id).orElse(null);
@@ -54,4 +45,3 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
     }
 }
-

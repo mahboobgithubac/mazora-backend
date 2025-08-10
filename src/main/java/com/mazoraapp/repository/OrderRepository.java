@@ -1,14 +1,10 @@
 package com.mazoraapp.repository;
-
 import com.mazoraapp.dto.OrderDTO;
 import com.mazoraapp.model.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
-
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByUserEmail(String email);
-
 	List<OrderDTO> getOrdersByUserId(Long userId);
-
 	List<Order> findByUserId(Long userId);
 }

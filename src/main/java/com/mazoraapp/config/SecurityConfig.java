@@ -1,12 +1,8 @@
 package com.mazoraapp.config;
 import com.mazoraapp.security.JwtAuthenticationFilter;
-
-
 import com.mazoraapp.service.UserService;
-
 import java.util.Arrays;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.http.CacheControl;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -35,24 +32,21 @@ public class SecurityConfig {
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 	@Autowired
 	private UserService userService;
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-		http
-				.cors() // ✅ Enable CORS
+		http.cors() // ✅ Enable CORS
 				.and().csrf().disable()
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers(
-								"/api/auth/**",
-								"/api/products/**",
-								"/uploads/**",
-								"/api/visits/**").permitAll()
-						.anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/auth/**", "/api/products/**", "/uploads/**", "/api/visits/**")
+						.permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
+
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -71,34 +65,14 @@ public class SecurityConfig {
 		return config.getAuthenticationManager();
 	}
 
-	
-	  public CorsFilter corsFilter() {
+	public CorsFilter corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
 		config.addAllowedOriginPattern("*"); // ✅ This works with allowCredentials=true
 		config.setAllowedHeaders(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

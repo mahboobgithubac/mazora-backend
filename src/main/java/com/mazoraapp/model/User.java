@@ -1,8 +1,5 @@
 package com.mazoraapp.model;
-
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Entity
 @Table(name = "users")
 @Data
@@ -44,5 +40,4 @@ public class User {
 	@NotBlank(message = "Role cannot be blank")
 	@Pattern(regexp = "^(USER|ADMIN)$", message = "Role must be USER or ADMIN")
 	private String role; // USER or ADMIN
-
 }
