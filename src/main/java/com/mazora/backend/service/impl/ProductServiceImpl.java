@@ -38,9 +38,9 @@ public class ProductServiceImpl implements ProductService {
 	   FileStorageServiceImpl filestorage; 
 	    
     
-	 String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
+	// String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
 //	 https://<your-railway-app>.up.railway.app/uploads/<filename>
-	 String imagePathLocal="http://localhost:8080/uploads/";
+	 //String imagePathLocal="http://localhost:8080/uploads/";
 
 	public Product saveProductWithImage(String title, String description, double price, String category,
 			MultipartFile imageFile) throws IOException {

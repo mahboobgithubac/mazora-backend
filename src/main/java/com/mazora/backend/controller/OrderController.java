@@ -55,7 +55,8 @@ public class OrderController {
 
 	@GetMapping("/user/{userId}")
 	public List<OrderDTO> getOrdersByUserId(@PathVariable Long userId) {
-		logger.info("Received request to fetch orders for userId: {}", userId);
+		logger.info("******Received request to fetch orders for userId: {}", userId);
+		System.out.println("**************Inside getOrdersByUserId  ->"+ userId) ;
 		return orderService.getOrdersByUserId(userId);
 	}
 	@PreAuthorize("hasRole('ADMIN')") // Optional: restrict to admin

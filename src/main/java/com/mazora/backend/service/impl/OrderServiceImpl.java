@@ -34,9 +34,9 @@ public class OrderServiceImpl implements OrderService {
 	private UserRepository userRepository;
 	@Autowired
 	private ProductRepository productRepository;
-	 String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
+	// String imagePathProd="https://mazora-backend-production.up.railway.app/uploads/";
 //	 https://<your-railway-app>.up.railway.app/uploads/<filename>
-	 String imagePathLocal="http://localhost:8089/uploads/";
+	// String imagePathLocal="http://localhost:8089/uploads/";
 	
 	public OrderServiceImpl(OrderRepository orderRepository) {
 		this.orderRepository = orderRepository;
@@ -81,11 +81,12 @@ public class OrderServiceImpl implements OrderService {
 	public List<OrderDTO> getOrdersByUserId(Long userId) {
 		List<Order> orders = orderRepository.findByUserId(userId); // ✅ now returns List<Order>
 		// .orElseThrow(() -> new OrderNotFoundException("Order not found"));
-
+System.out.println("At 84 orders =>"+orders);
 		return orders.stream().map(this::convertToDTO).collect(Collectors.toList());
 	}
 
 	private OrderDTO convertToDTO(Order order) {
+		System.out.println("Inside convert to dto at 89********");
 		OrderDTO dto = new OrderDTO();
 		dto.setId(order.getId());
 		dto.setShippingAddress(order.getShippingAddress());
@@ -98,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
 			itemDTO.setQuantity(item.getQuantity());
 			itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
 //		   itemDTO.setImage(imagePathProd+""+item.getProduct().getImageUrl()); // ✅ Set image here
-		   itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
+		  // itemDTO.setImage(item.getProduct().getImageUrl()); // ✅ Set image here
 			
 			
 			//dto.setImage(imagePathProd+""+ product.getImageUrl());
